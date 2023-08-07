@@ -27,10 +27,6 @@ export default function Login(props: PaperProps) {
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      // password: (val) =>
-      //   val.length <= 5
-      //     ? "Password should include at least 6 characters"
-      //     : null,
     },
   });
 
@@ -58,7 +54,6 @@ export default function Login(props: PaperProps) {
             },
           })
             .then((res: any) => {
-              console.log(res)
               if (res.data.status === 200) {
                 // localStorage.setItem("uid", res.data._id);
                 // localStorage.setItem("accessToken", res.data.accessToken);
@@ -85,8 +80,7 @@ export default function Login(props: PaperProps) {
                 });
               }
             })
-            .catch((error) => {
-              console.log(error);
+            .catch(() => {
               notifications.show({
                 title: `Invalid Username or email address`,
                 message: `Check if you entered the correct information🤥`,
