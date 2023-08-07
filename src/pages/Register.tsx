@@ -14,7 +14,10 @@ import {
   GithubLoginButton,
   GoogleLoginButton,
 } from "react-social-login-buttons";
-// import { GoogleButton, TwitterButton } from "../SocialButtons/SocialButtons";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 export default function Register(props: PaperProps) {
   const form = useForm({
@@ -22,21 +25,26 @@ export default function Register(props: PaperProps) {
       name: "",
       email: "",
       password: "",
+      password_confirmation: "",
     },
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
+        val.length <= 4
+          ? "Password should include at least 4 characters"
           : null,
+      password_confirmation: (val, values) =>
+        val === values.password
+          ? null
+          : "Password confirmation should match the password",
     },
   });
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
-        Welcome to Mantine
+        Welcome to Mantine, Register with
       </Text>
 
       <Group grow mb="md" mt="md">
@@ -46,7 +54,56 @@ export default function Register(props: PaperProps) {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form
+        onSubmit={form.onSubmit(() => {
+          axios({
+            method: "post",
+            url: "http://localhost:3000/api/v1/auth/register",
+            data: {
+              names: form.values.name,
+              email: form.values.email,
+              password: form.values.password,
+              password_confirmation: form.values.password_confirmation,
+            },
+          })
+            .then((res: any) => {
+              if (res.status === 200) {
+                // localStorage.setItem("uid", res.data._id);
+                // localStorage.setItem("accessToken", res.data.accessToken);
+                // localStorage.setItem("username", res.data.username);
+                notifications.show({
+                  title: `Account Created Successfull`,
+                  message: `Welcome`,
+                  color: "green",
+                  autoClose: 2000,
+                  icon: <IconCheck />,
+                });
+
+                // const accessToken = localStorage.getItem("accessToken");
+                // if (accessToken) {
+                //   navigate("/landing");
+                // }
+              } else {
+                notifications.show({
+                  title: `Invalid Username or email address`,
+                  message: `Check if you entered the correct information🤥`,
+                  color: "red",
+                  autoClose: 2000,
+                  icon: <IconX />,
+                });
+              }
+            })
+            .catch(() => {
+              notifications.show({
+                title: `Invalid Username or email address`,
+                message: `Check if you entered the correct information🤥`,
+                color: "red",
+                autoClose: 2000,
+                icon: <IconX />,
+              });
+            });
+        })}
+      >
         <TextInput
           label="Name"
           placeholder="Your name"
@@ -77,13 +134,30 @@ export default function Register(props: PaperProps) {
           }
           error={
             form.errors.password &&
-            "Password should include at least 6 characters"
+            "Password should include at least 4 characters"
+          }
+          radius="md"
+        />
+        <PasswordInput
+          required
+          label="Password Confirmation"
+          placeholder="Confirm Your password"
+          value={form.values.password_confirmation}
+          onChange={(event) =>
+            form.setFieldValue(
+              "password_confirmation",
+              event.currentTarget.value
+            )
+          }
+          error={
+            form.errors.password_confirmation &&
+            "Password confirmation should match the password"
           }
           radius="md"
         />
         <Group position="apart" mt="xl">
           <Anchor type="button" color="dimmed" size="xs">
-            <Text>Already have an account? Login"</Text>
+            <NavLink to={"/"}>Already have an account? Login"</NavLink>
           </Anchor>
           <Button type="submit" radius="xl">
             Register
