@@ -15,7 +15,8 @@ import {
   GoogleLoginButton,
 } from "react-social-login-buttons";
 import axios from "axios";
-// import { GoogleButton, TwitterButton } from "../SocialButtons/SocialButtons";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 
 export default function Login(props: PaperProps) {
   const form = useForm({
@@ -46,19 +47,56 @@ export default function Login(props: PaperProps) {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {
-        axios
-          .post("http://localhost:3000/api/v1/auth/login", {
-            email: form.values.email,
-            password: form.values.password
+      <form
+        onSubmit={form.onSubmit(() => {
+          axios({
+            method: "post",
+            url: "http://localhost:3000/api/v1/auth/login",
+            data: {
+              email: form.values.email,
+              password: form.values.password,
+            },
           })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      })}>
+            .then((res: any) => {
+              console.log(res)
+              if (res.data.status === 200) {
+                // localStorage.setItem("uid", res.data._id);
+                // localStorage.setItem("accessToken", res.data.accessToken);
+                // localStorage.setItem("username", res.data.username);
+                notifications.show({
+                  title: `Login Successfull`,
+                  message: `Welcome back`,
+                  color: "green",
+                  autoClose: 2000,
+                  icon: <IconCheck />,
+                });
+
+                // const accessToken = localStorage.getItem("accessToken");
+                // if (accessToken) {
+                //   navigate("/landing");
+                // }
+              }else{
+                notifications.show({
+                  title: `Invalid Username or email address`,
+                  message: `Check if you entered the correct information🤥`,
+                  color: "red",
+                  autoClose: 2000,
+                  icon: <IconX />,
+                });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              notifications.show({
+                title: `Invalid Username or email address`,
+                message: `Check if you entered the correct information🤥`,
+                color: "red",
+                autoClose: 2000,
+                icon: <IconX />,
+              });
+            });
+        })}
+      >
         <TextInput
           required
           label="Email"
