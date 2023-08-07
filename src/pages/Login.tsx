@@ -14,22 +14,22 @@ import {
   GithubLoginButton,
   GoogleLoginButton,
 } from "react-social-login-buttons";
+import axios from "axios";
 // import { GoogleButton, TwitterButton } from "../SocialButtons/SocialButtons";
 
 export default function Login(props: PaperProps) {
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
       password: "",
     },
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
+      // password: (val) =>
+      //   val.length <= 5
+      //     ? "Password should include at least 6 characters"
+      //     : null,
     },
   });
 
@@ -46,11 +46,23 @@ export default function Login(props: PaperProps) {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={form.onSubmit(() => {
+        axios
+          .post("http://localhost:3000/api/v1/auth/login", {
+            email: form.values.email,
+            password: form.values.password
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      })}>
         <TextInput
           required
           label="Email"
-          placeholder="hello@mantine.dev"
+          placeholder="hello@gmail.com"
           value={form.values.email}
           onChange={(event) =>
             form.setFieldValue("email", event.currentTarget.value)
