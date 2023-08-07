@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import {
   TextInput,
@@ -33,7 +34,7 @@ export default function Login(props: PaperProps) {
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
-        Welcome to Mantine, Register with
+        Welcome to Mantine, Login with
       </Text>
 
       <Group grow mb="md" mt="md">
@@ -70,7 +71,7 @@ export default function Login(props: PaperProps) {
                 // if (accessToken) {
                 //   navigate("/landing");
                 // }
-              }else{
+              } else {
                 notifications.show({
                   title: `Invalid Username or email address`,
                   message: `Check if you entered the correct information🤥`,
@@ -120,8 +121,13 @@ export default function Login(props: PaperProps) {
 
         <Group position="apart" mt="xl">
           <Anchor type="button" color="dimmed" size="xs">
-            <Text>Don't have an account? Register</Text>
+            <NavLink to={"register"}>Don't have an account? Register</NavLink>
           </Anchor>
+
+          <Anchor type="button" color="dimmed" size="xs">
+            <NavLink to={"reset-password"}>Forgot Password?</NavLink>
+          </Anchor>
+
           <Button type="submit" radius="xl">
             Login
           </Button>

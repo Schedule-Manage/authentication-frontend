@@ -17,6 +17,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 export default function Register(props: PaperProps) {
   const form = useForm({
@@ -43,7 +44,7 @@ export default function Register(props: PaperProps) {
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
-        Welcome to Mantine
+        Welcome to Mantine, Register with
       </Text>
 
       <Group grow mb="md" mt="md">
@@ -156,7 +157,7 @@ export default function Register(props: PaperProps) {
         />
         <Group position="apart" mt="xl">
           <Anchor type="button" color="dimmed" size="xs">
-            <Text>Already have an account? Login"</Text>
+            <NavLink to={"/"}>Already have an account? Login"</NavLink>
           </Anchor>
           <Button type="submit" radius="xl">
             Register

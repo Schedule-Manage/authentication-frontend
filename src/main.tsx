@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import ForgotPassword from "./pages/ForgotPassword";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset-password" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </MantineProvider>
