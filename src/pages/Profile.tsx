@@ -86,7 +86,7 @@ export default function Profile(props: PaperProps) {
           onChange={(event) =>
             form.setFieldValue("currentPassword", event.currentTarget.value)
           }
-        //   error={form.errors.newPassword}
+          //   error={form.errors.newPassword}
           radius="md"
         />
 
@@ -110,9 +110,7 @@ export default function Profile(props: PaperProps) {
           onChange={(event) =>
             form.setFieldValue("confirmNewPassword", event.currentTarget.value)
           }
-          error={
-            form.errors.confirmNewPassword
-          }
+          error={form.errors.confirmNewPassword}
           radius="md"
         />
 
