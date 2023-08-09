@@ -132,10 +132,7 @@ export default function Register(props: PaperProps) {
           onChange={(event) =>
             form.setFieldValue("password", event.currentTarget.value)
           }
-          error={
-            form.errors.password &&
-            "Password should include at least 4 characters"
-          }
+          error={form.errors.password}
           radius="md"
         />
         <PasswordInput
@@ -149,10 +146,7 @@ export default function Register(props: PaperProps) {
               event.currentTarget.value
             )
           }
-          error={
-            form.errors.password_confirmation &&
-            "Password confirmation should match the password"
-          }
+          error={form.errors.password_confirmation}
           radius="md"
         />
         <Group position="apart" mt="xl">

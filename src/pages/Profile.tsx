@@ -1,102 +1,117 @@
 import { NavLink } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import {
-  TextInput,
   PasswordInput,
   Text,
   Paper,
   Group,
   PaperProps,
   Button,
-  Divider,
   Anchor,
 } from "@mantine/core";
-import axios from "axios";
-import { IconCheck, IconX } from "@tabler/icons-react";
-import { notifications } from "@mantine/notifications";
+// import axios from "axios";
+// import { IconCheck, IconX } from "@tabler/icons-react";
+// import { notifications } from "@mantine/notifications";
 
 export default function Profile(props: PaperProps) {
   const form = useForm({
     initialValues: {
-      email: "",
-      password: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      newPassword: (val) =>
+        val.length <= 4
+          ? "Password should include at least 4 characters"
+          : null,
+      confirmNewPassword: (val, values) =>
+        val === values.newPassword
+          ? null
+          : "Password confirmation should match the the new password",
     },
   });
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
-        Welcome to Mantine, Login with
+        Your Profile Page
       </Text>
-      <Divider label="Or continue with email" labelPosition="center" my="lg" />
-
       <form
         onSubmit={form.onSubmit(() => {
-          axios({
-            method: "post",
-            url: "http://localhost:3000/api/v1/auth/login",
-            data: {
-              email: form.values.email,
-              password: form.values.password,
-            },
-          })
-            .then((res: any) => {
-              if (res.data.status === 200) {
-                notifications.show({
-                  title: `Login Successfull`,
-                  message: `Welcome back`,
-                  color: "green",
-                  autoClose: 2000,
-                  icon: <IconCheck />,
-                });
-              } else {
-                notifications.show({
-                  title: `Invalid Username or email address`,
-                  message: `Check if you entered the correct information🤥`,
-                  color: "red",
-                  autoClose: 2000,
-                  icon: <IconX />,
-                });
-              }
-            })
-            .catch(() => {
-              notifications.show({
-                title: `Invalid Username or email address`,
-                message: `Check if you entered the correct information🤥`,
-                color: "red",
-                autoClose: 2000,
-                icon: <IconX />,
-              });
-            });
+          //   axios({
+          //     method: "post",
+          //     url: "http://localhost:3000/api/v1/auth/login",
+          //     data: {
+          //       email: form.values.email,
+          //       password: form.values.password,
+          //     },
+          //   })
+          //     .then((res: any) => {
+          //       if (res.data.status === 200) {
+          //         notifications.show({
+          //           title: `Login Successfull`,
+          //           message: `Welcome back`,
+          //           color: "green",
+          //           autoClose: 2000,
+          //           icon: <IconCheck />,
+          //         });
+          //       } else {
+          //         notifications.show({
+          //           title: `Invalid Username or email address`,
+          //           message: `Check if you entered the correct information🤥`,
+          //           color: "red",
+          //           autoClose: 2000,
+          //           icon: <IconX />,
+          //         });
+          //       }
+          //     })
+          //     .catch(() => {
+          //       notifications.show({
+          //         title: `Invalid Username or email address`,
+          //         message: `Check if you entered the correct information🤥`,
+          //         color: "red",
+          //         autoClose: 2000,
+          //         icon: <IconX />,
+          //       });
+          //     });
         })}
       >
-        <TextInput
+        <PasswordInput
           required
-          label="Email"
-          placeholder="hello@gmail.com"
-          value={form.values.email}
+          label="Old Password"
+          placeholder="Enter Old Password"
+          value={form.values.currentPassword}
           onChange={(event) =>
-            form.setFieldValue("email", event.currentTarget.value)
+            form.setFieldValue("currentPassword", event.currentTarget.value)
           }
-          error={form.errors.email && "Invalid email"}
+        //   error={form.errors.newPassword}
           radius="md"
         />
 
         <PasswordInput
           required
-          label="Password"
-          placeholder="Your password"
-          value={form.values.password}
+          label="New Password"
+          placeholder="Enter New Password"
+          value={form.values.newPassword}
           onChange={(event) =>
-            form.setFieldValue("password", event.currentTarget.value)
+            form.setFieldValue("newPassword", event.currentTarget.value)
+          }
+          error={form.errors.newPassword}
+          radius="md"
+        />
+
+        <PasswordInput
+          required
+          label="New Password"
+          placeholder="Enter New Password"
+          value={form.values.confirmNewPassword}
+          onChange={(event) =>
+            form.setFieldValue("confirmNewPassword", event.currentTarget.value)
           }
           error={
-            form.errors.password &&
-            "Password should include at least 6 characters"
+            form.errors.confirmNewPassword
           }
           radius="md"
         />
