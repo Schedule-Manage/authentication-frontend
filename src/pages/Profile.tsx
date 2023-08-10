@@ -42,7 +42,6 @@ export default function Profile(props: PaperProps) {
         <Text>Ian Kamau</Text>
       </div>
 
-
       <Paper
         radius="md"
         p="xl"
@@ -56,36 +55,25 @@ export default function Profile(props: PaperProps) {
         </Text>
         <form
           onSubmit={form.onSubmit(() => {
-              axios({
-                method: "post",
-                url: "http://localhost:3000/api/v1/auth/reset/password",
-                data: {
-                  
-                  currentPassword: form.values.currentPassword,
-                  newPassword: form.values.newPassword,
-                  confirmNewPassword: form.values.confirmNewPassword,
-                },
-              })
-                .then((res: any) => {
-                  if (res.data.status === 200) {
-                    notifications.show({
-                      title: `Login Successfull`,
-                      message: `Welcome back`,
-                      color: "green",
-                      autoClose: 2000,
-                      icon: <IconCheck />,
-                    });
-                  } else {
-                    notifications.show({
-                      title: `Invalid Username or email address`,
-                      message: `Check if you entered the correct information🤥`,
-                      color: "red",
-                      autoClose: 2000,
-                      icon: <IconX />,
-                    });
-                  }
-                })
-                .catch(() => {
+            axios({
+              method: "post",
+              url: "http://localhost:3000/api/v1/auth/update/password",
+              data: {
+                currentPassword: form.values.currentPassword,
+                newPassword: form.values.newPassword,
+                confirmNewPassword: form.values.confirmNewPassword,
+              },
+            })
+              .then((res: any) => {
+                if (res.data.status === 200) {
+                  notifications.show({
+                    title: `Login Successfull`,
+                    message: `Welcome back`,
+                    color: "green",
+                    autoClose: 2000,
+                    icon: <IconCheck />,
+                  });
+                } else {
                   notifications.show({
                     title: `Invalid Username or email address`,
                     message: `Check if you entered the correct information🤥`,
@@ -93,7 +81,17 @@ export default function Profile(props: PaperProps) {
                     autoClose: 2000,
                     icon: <IconX />,
                   });
+                }
+              })
+              .catch(() => {
+                notifications.show({
+                  title: `Invalid Username or email address`,
+                  message: `Check if you entered the correct information🤥`,
+                  color: "red",
+                  autoClose: 2000,
+                  icon: <IconX />,
                 });
+              });
           })}
         >
           <PasswordInput
@@ -136,7 +134,6 @@ export default function Profile(props: PaperProps) {
           />
 
           <Group position="apart" mt="xl">
-
             <Button type="submit" radius="xl">
               Submit
             </Button>
