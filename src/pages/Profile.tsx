@@ -1,5 +1,4 @@
 import "../index.css";
-import { NavLink } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import {
   PasswordInput,
@@ -8,11 +7,10 @@ import {
   Group,
   PaperProps,
   Button,
-  Anchor,
 } from "@mantine/core";
-// import axios from "axios";
-// import { IconCheck, IconX } from "@tabler/icons-react";
-// import { notifications } from "@mantine/notifications";
+import axios from "axios";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 
 export default function Profile(props: PaperProps) {
   const form = useForm({
@@ -43,6 +41,8 @@ export default function Profile(props: PaperProps) {
         <Text>kian99564@gmail.com</Text>
         <Text>Ian Kamau</Text>
       </div>
+
+
       <Paper
         radius="md"
         p="xl"
@@ -56,42 +56,44 @@ export default function Profile(props: PaperProps) {
         </Text>
         <form
           onSubmit={form.onSubmit(() => {
-            //   axios({
-            //     method: "post",
-            //     url: "http://localhost:3000/api/v1/auth/login",
-            //     data: {
-            //       email: form.values.email,
-            //       password: form.values.password,
-            //     },
-            //   })
-            //     .then((res: any) => {
-            //       if (res.data.status === 200) {
-            //         notifications.show({
-            //           title: `Login Successfull`,
-            //           message: `Welcome back`,
-            //           color: "green",
-            //           autoClose: 2000,
-            //           icon: <IconCheck />,
-            //         });
-            //       } else {
-            //         notifications.show({
-            //           title: `Invalid Username or email address`,
-            //           message: `Check if you entered the correct information🤥`,
-            //           color: "red",
-            //           autoClose: 2000,
-            //           icon: <IconX />,
-            //         });
-            //       }
-            //     })
-            //     .catch(() => {
-            //       notifications.show({
-            //         title: `Invalid Username or email address`,
-            //         message: `Check if you entered the correct information🤥`,
-            //         color: "red",
-            //         autoClose: 2000,
-            //         icon: <IconX />,
-            //       });
-            //     });
+              axios({
+                method: "post",
+                url: "http://localhost:3000/api/v1/auth/reset/password",
+                data: {
+                  
+                  currentPassword: form.values.currentPassword,
+                  newPassword: form.values.newPassword,
+                  confirmNewPassword: form.values.confirmNewPassword,
+                },
+              })
+                .then((res: any) => {
+                  if (res.data.status === 200) {
+                    notifications.show({
+                      title: `Login Successfull`,
+                      message: `Welcome back`,
+                      color: "green",
+                      autoClose: 2000,
+                      icon: <IconCheck />,
+                    });
+                  } else {
+                    notifications.show({
+                      title: `Invalid Username or email address`,
+                      message: `Check if you entered the correct information🤥`,
+                      color: "red",
+                      autoClose: 2000,
+                      icon: <IconX />,
+                    });
+                  }
+                })
+                .catch(() => {
+                  notifications.show({
+                    title: `Invalid Username or email address`,
+                    message: `Check if you entered the correct information🤥`,
+                    color: "red",
+                    autoClose: 2000,
+                    icon: <IconX />,
+                  });
+                });
           })}
         >
           <PasswordInput
@@ -134,16 +136,9 @@ export default function Profile(props: PaperProps) {
           />
 
           <Group position="apart" mt="xl">
-            {/* <Anchor type="button" color="dimmed" size="xs">
-              <NavLink to={"register"}>Don't have an account? Register</NavLink>
-            </Anchor>
-
-            <Anchor type="button" color="dimmed" size="xs">
-              <NavLink to={"reset-password"}>Forgot Password?</NavLink>
-            </Anchor> */}
 
             <Button type="submit" radius="xl">
-              Login
+              Submit
             </Button>
           </Group>
         </form>
