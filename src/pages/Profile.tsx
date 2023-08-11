@@ -57,7 +57,7 @@ export default function Profile(props: PaperProps) {
           onSubmit={form.onSubmit(() => {
             axios({
               method: "post",
-              url: "http://localhost:3000/api/v1/auth/update/password",
+              url: `${process.env.SERVER_URL}/auth/update/password`,
               data: {
                 currentPassword: form.values.currentPassword,
                 newPassword: form.values.newPassword,
