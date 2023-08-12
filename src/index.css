@@ -4,3 +4,12 @@ html {
   padding: 0;
   box-sizing: border-box;
 }
+
+.profile-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 4em;
+  gap: 5em;
+}
