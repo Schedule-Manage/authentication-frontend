@@ -125,7 +125,7 @@ export default function Login(props: PaperProps) {
           </Anchor>
 
           <Anchor type="button" color="dimmed" size="xs">
-            <NavLink to={"reset-password"}>Forgot Password?</NavLink>
+            <NavLink to={"forgot/password"}>Forgot Password?</NavLink>
           </Anchor>
 
           <Button type="submit" radius="xl">
