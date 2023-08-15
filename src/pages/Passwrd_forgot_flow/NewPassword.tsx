@@ -11,6 +11,7 @@ import {
   Center,
   Box,
   rem,
+  PasswordInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -40,47 +41,57 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function ResetToken() {
-    const navigate = useNavigate();
+export default function NewPassword() {
+  const navigate = useNavigate();
   const { classes } = useStyles();
   const form = useForm({
     initialValues: {
       token: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
 
     validate: {
-      token: (val) => (val.length < 8 ? "Invalid token" : null),
+      newPassword: (val) => (val.length < 8 ? null : "Invalid token"),
+      confirmNewPassword: (val, values) =>
+        val === values.newPassword
+          ? null
+          : "Password confirmation should match the password",
     },
   });
 
   return (
     <Container size={460} my={30}>
       <Title className={classes.title} align="center">
-        Enter reset token to proceed
+        Enter Your New Password
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Enter your token to reset your password
+        Enter new password and password confirmation
       </Text>
 
       <form
         onSubmit={form.onSubmit(() => {
           axios({
             method: "post",
-            url: "http://localhost:3000/api/v1/auth/reset/token",
+            url: "http://localhost:3000/api/v1/auth/update/password",
+            headers: {
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGE3MTNmNzI1M2RmNWJlNzQ4NjU3NyIsImlhdCI6MTY5MjEzMDIzMywiZXhwIjoxNjkyMTczNDMzfQ.bu6sthQjaln2N3nglHKyZh9Gn73VJWmu34a_-_JVS24`,
+            },
             data: {
-              token: form.values.token,
+              newPassword: form.values.newPassword,
+              confirmNewPassword: form.values.confirmNewPassword,
             },
           })
             .then((res: any) => {
               if (res.data.status === 200) {
                 notifications.show({
-                  title: `Request Sent`,
-                  message: `You can now update your password`,
+                  title: `Password Updated Successfully`,
+                  message: `Login to proceed`,
                   color: "green",
                   autoClose: 2000,
                   icon: <IconCheck />,
                 });
-                navigate("/new/password");
+                navigate("/");
               } else {
                 notifications.show({
                   title: `Invalid token`,
@@ -104,16 +115,29 @@ export default function ResetToken() {
       >
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
           {/* Text input for token */}
-          <TextInput
-            label="Your token"
-            value={form.values.token}
+          <PasswordInput
+            label="New Password"
+            value={form.values.newPassword}
             onChange={(event) =>
-              form.setFieldValue("token", event.target.value)
+              form.setFieldValue("newPassword", event.target.value)
             }
-            placeholder="Enter the secret token"
-            error={form.errors.token}
+            placeholder="Enter your new password"
+            error={form.errors.newPassword}
             required
           />
+
+          {/* For new password confirmation */}
+          <PasswordInput
+            label="Confirm New Password"
+            value={form.values.confirmNewPassword}
+            onChange={(event) =>
+              form.setFieldValue("confirmNewPassword", event.target.value)
+            }
+            placeholder="Confirm your new password"
+            error={form.errors.confirmNewPassword}
+            required
+          />
+
           <Group position="apart" mt="lg" className={classes.controls}>
             <Anchor color="dimmed" size="sm" className={classes.control}>
               <NavLink to={"/"}>
