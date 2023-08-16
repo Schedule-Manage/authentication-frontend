@@ -56,8 +56,9 @@ export default function Login(props: PaperProps) {
           })
             .then((res: any) => {
               if (res.data.status === 200) {
+                console.log(res.data.data.access_token)
                 // localStorage.setItem("uid", res.data._id);
-                // localStorage.setItem("accessToken", res.data.accessToken);
+                localStorage.setItem("accessToken", res.data.data.access_token);
                 // localStorage.setItem("username", res.data.username);
                 notifications.show({
                   title: `Login Successfull`,

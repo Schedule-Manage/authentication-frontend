@@ -3,7 +3,6 @@ import {
   Paper,
   Title,
   Text,
-  TextInput,
   Button,
   Container,
   Group,
@@ -42,11 +41,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function NewPassword() {
+  const bearerToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const { classes } = useStyles();
   const form = useForm({
     initialValues: {
-      token: "",
       newPassword: "",
       confirmNewPassword: "",
     },
@@ -75,7 +74,7 @@ export default function NewPassword() {
             method: "post",
             url: "http://localhost:3000/api/v1/auth/update/password",
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGE3MTNmNzI1M2RmNWJlNzQ4NjU3NyIsImlhdCI6MTY5MjEzMDIzMywiZXhwIjoxNjkyMTczNDMzfQ.bu6sthQjaln2N3nglHKyZh9Gn73VJWmu34a_-_JVS24`,
+              Authorization: `Bearer ${bearerToken}`,
             },
             data: {
               newPassword: form.values.newPassword,

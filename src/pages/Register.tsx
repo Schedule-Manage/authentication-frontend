@@ -58,6 +58,7 @@ export default function Register(props: PaperProps) {
         onSubmit={form.onSubmit(() => {
           axios({
             method: "post",
+            // url: `${process.env.SERVER_URL}/auth/register`,
             url: "http://localhost:3000/api/v1/auth/register",
             data: {
               names: form.values.name,
