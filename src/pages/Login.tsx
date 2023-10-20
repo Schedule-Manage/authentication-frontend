@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import {
   TextInput,
@@ -30,6 +30,7 @@ export default function Login(props: PaperProps) {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
     },
   });
+  const navigate = useNavigate();
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
@@ -69,9 +70,9 @@ export default function Login(props: PaperProps) {
                 });
 
                 // const accessToken = localStorage.getItem("accessToken");
-                // if (accessToken) {
-                //   navigate("/landing");
-                // }
+                if (res.data.data.access_token) {
+                  navigate("/landing");
+                }
               } else {
                 notifications.show({
                   title: `Invalid Username or email address`,
