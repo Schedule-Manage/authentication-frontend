@@ -9,7 +9,7 @@ export default function Media() {
     fetch(`${import.meta.env.VITE_SERVER_URL}music`)
       .then((res) => res.json())
       .then((data) => setAllMusic(data.data));
-  }, []);
+  }, [allMusic]);
 
   const submitMusic = (e: any) => {
     e.preventDefault();
@@ -39,18 +39,19 @@ export default function Media() {
         <div>
           <h1>All Music</h1>
           {allMusic &&
-            allMusic.map((music: any) => {
-              return (
-                // <div>
+            allMusic.map((music: any) => (
+              <div key={music.id}>
+                {music.mimetype === "audio/mpeg" ? (
                   <audio controls>
-                    <source
-                      src={music.audio_url}
-                      type={music.mimetype}
-                    ></source>
+                    <source src={music.audio_url} type={music.mimetype} />
                   </audio>
-                // </div>
-              );
-            })}
+                ) : (
+                  <video controls>
+                    <source src={music.audio_url} type={music.mimetype} />
+                  </video>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </div>
