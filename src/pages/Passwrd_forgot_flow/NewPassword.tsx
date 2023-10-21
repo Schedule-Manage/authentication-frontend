@@ -3,7 +3,6 @@ import {
   Paper,
   Title,
   Text,
-  TextInput,
   Button,
   Container,
   Group,
@@ -11,6 +10,7 @@ import {
   Center,
   Box,
   rem,
+  PasswordInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -18,6 +18,7 @@ import { IconArrowLeft, IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 
+// Styles for the page
 const useStyles = createStyles((theme) => ({
   title: {
     fontSize: rem(26),
@@ -39,50 +40,60 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function ForgotPassword() {
-  const navigate = useNavigate()
+export default function NewPassword() {
+  const bearerToken = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
   const { classes } = useStyles();
   const form = useForm({
     initialValues: {
-      email: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      newPassword: (val) => (val.length < 8 ? null : "Invalid token"),
+      confirmNewPassword: (val, values) =>
+        val === values.newPassword
+          ? null
+          : "Password confirmation should match the password",
     },
   });
 
   return (
     <Container size={460} my={30}>
       <Title className={classes.title} align="center">
-        Forgot your password?
+        Enter Your New Password
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Enter your email to get a reset link
+        Enter new password and password confirmation
       </Text>
 
       <form
         onSubmit={form.onSubmit(() => {
           axios({
             method: "post",
-            url: "http://localhost:3000/api/v1/auth/forgot/password",
+            url: "http://localhost:3000/api/v1/auth/update/password",
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
             data: {
-              email: form.values.email,
+              newPassword: form.values.newPassword,
+              confirmNewPassword: form.values.confirmNewPassword,
             },
           })
             .then((res: any) => {
               if (res.data.status === 200) {
-                navigate("/reset/token")
                 notifications.show({
-                  title: `Request Sent`,
-                  message: `A verification email has been sent successfully`,
+                  title: `Password Updated Successfully`,
+                  message: `Login to proceed`,
                   color: "green",
                   autoClose: 2000,
                   icon: <IconCheck />,
                 });
+                navigate("/");
               } else {
                 notifications.show({
-                  title: `Invalid email address or email address not found`,
+                  title: `Invalid token`,
                   message: `Check if you entered the correct information🤥`,
                   color: "red",
                   autoClose: 2000,
@@ -92,7 +103,7 @@ export default function ForgotPassword() {
             })
             .catch(() => {
               notifications.show({
-                title: `Invalid Username or email address`,
+                title: `Invalid Username or token address`,
                 message: `Check if you entered the correct information🤥`,
                 color: "red",
                 autoClose: 2000,
@@ -102,17 +113,30 @@ export default function ForgotPassword() {
         })}
       >
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          {/* Text input for email */}
-          <TextInput
-            label="Your email"
-            value={form.values.email}
+          {/* Text input for token */}
+          <PasswordInput
+            label="New Password"
+            value={form.values.newPassword}
             onChange={(event) =>
-              form.setFieldValue("email", event.target.value)
+              form.setFieldValue("newPassword", event.target.value)
             }
-            placeholder="youremail@something.com"
-            error={form.errors.email}
+            placeholder="Enter your new password"
+            error={form.errors.newPassword}
             required
           />
+
+          {/* For new password confirmation */}
+          <PasswordInput
+            label="Confirm New Password"
+            value={form.values.confirmNewPassword}
+            onChange={(event) =>
+              form.setFieldValue("confirmNewPassword", event.target.value)
+            }
+            placeholder="Confirm your new password"
+            error={form.errors.confirmNewPassword}
+            required
+          />
+
           <Group position="apart" mt="lg" className={classes.controls}>
             <Anchor color="dimmed" size="sm" className={classes.control}>
               <NavLink to={"/"}>
@@ -123,7 +147,7 @@ export default function ForgotPassword() {
               </NavLink>
             </Anchor>
             <Button className={classes.control} type="submit">
-              Reset password
+              Submit
             </Button>
           </Group>
         </Paper>

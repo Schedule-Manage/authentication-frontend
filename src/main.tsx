@@ -8,6 +8,8 @@ import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
+import ResetToken from "./pages/Passwrd_forgot_flow/ResetToken";
+import NewPassword from "./pages/Passwrd_forgot_flow/NewPassword";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -19,6 +21,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/register" element={<Register />} />
           <Route path="/forgot/password" element={<ForgotPassword />} />
           <Route path="/profile" element={<Profile />} />
+
+          <Route path="/reset/token" element={<ResetToken />} />
+          <Route path="/new/password" element={<NewPassword />} />
         </Routes>
       </BrowserRouter>
     </MantineProvider>

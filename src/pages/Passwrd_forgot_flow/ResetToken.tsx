@@ -18,6 +18,7 @@ import { IconArrowLeft, IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 
+// Styles for the page
 const useStyles = createStyles((theme) => ({
   title: {
     fontSize: rem(26),
@@ -39,50 +40,50 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function ForgotPassword() {
-  const navigate = useNavigate()
+export default function ResetToken() {
+    const navigate = useNavigate();
   const { classes } = useStyles();
   const form = useForm({
     initialValues: {
-      email: "",
+      token: "",
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      token: (val) => (val.length < 8 ? "Invalid token" : null),
     },
   });
 
   return (
     <Container size={460} my={30}>
       <Title className={classes.title} align="center">
-        Forgot your password?
+        Enter reset token to proceed
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Enter your email to get a reset link
+        Enter your token to reset your password
       </Text>
 
       <form
         onSubmit={form.onSubmit(() => {
           axios({
             method: "post",
-            url: "http://localhost:3000/api/v1/auth/forgot/password",
+            url: "http://localhost:3000/api/v1/auth/reset/token",
             data: {
-              email: form.values.email,
+              token: form.values.token,
             },
           })
             .then((res: any) => {
               if (res.data.status === 200) {
-                navigate("/reset/token")
                 notifications.show({
                   title: `Request Sent`,
-                  message: `A verification email has been sent successfully`,
+                  message: `You can now update your password`,
                   color: "green",
                   autoClose: 2000,
                   icon: <IconCheck />,
                 });
+                navigate("/new/password");
               } else {
                 notifications.show({
-                  title: `Invalid email address or email address not found`,
+                  title: `Invalid token`,
                   message: `Check if you entered the correct information🤥`,
                   color: "red",
                   autoClose: 2000,
@@ -92,7 +93,7 @@ export default function ForgotPassword() {
             })
             .catch(() => {
               notifications.show({
-                title: `Invalid Username or email address`,
+                title: `Invalid Username or token address`,
                 message: `Check if you entered the correct information🤥`,
                 color: "red",
                 autoClose: 2000,
@@ -102,15 +103,15 @@ export default function ForgotPassword() {
         })}
       >
         <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-          {/* Text input for email */}
+          {/* Text input for token */}
           <TextInput
-            label="Your email"
-            value={form.values.email}
+            label="Your token"
+            value={form.values.token}
             onChange={(event) =>
-              form.setFieldValue("email", event.target.value)
+              form.setFieldValue("token", event.target.value)
             }
-            placeholder="youremail@something.com"
-            error={form.errors.email}
+            placeholder="Enter the secret token"
+            error={form.errors.token}
             required
           />
           <Group position="apart" mt="lg" className={classes.controls}>
@@ -123,7 +124,7 @@ export default function ForgotPassword() {
               </NavLink>
             </Anchor>
             <Button className={classes.control} type="submit">
-              Reset password
+              Submit
             </Button>
           </Group>
         </Paper>
