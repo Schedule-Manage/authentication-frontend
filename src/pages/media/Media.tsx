@@ -37,10 +37,11 @@ export default function Media() {
         </form>
 
         <div>
-          <h1>All Music</h1>
+          <p>All Music</p>
           {allMusic &&
             allMusic.map((music: any) => (
-              <div key={music.id}>
+              <div key={music._id}>
+                <h1>{music.title}</h1>
                 {music.mimetype === "audio/mpeg" ? (
                   <audio controls>
                     <source src={music.audio_url} type={music.mimetype} />
