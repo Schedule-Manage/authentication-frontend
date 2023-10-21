@@ -106,7 +106,25 @@ export default function Media() {
             {allHistory && Array.isArray(allHistory) ? (
               allHistory.map((music: any) => (
                 <div key={music._id}>
-                  <h1>{music.title}</h1>
+                  <div>
+                    <h1>{music.title}</h1>
+                    <button
+                      onClick={() => {
+                        console.log(music);
+                        fetch(
+                          `${
+                            import.meta.env.VITE_SERVER_URL
+                          }music/history/playlist/${music._id}`,
+                          {
+                            method: "DELETE",
+                          }
+                        ).then((res) => res.json());
+                      }}
+                    >
+                      Delete history
+                    </button>
+                  </div>
+
                   <audio controls>
                     <source src={music.audio_url} type="audio/mpeg" />
                   </audio>
