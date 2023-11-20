@@ -41,7 +41,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function NewPassword() {
-  const bearerToken = localStorage.getItem("accessToken");
+  const bearerToken = localStorage.getItem("token");
+  console.log(bearerToken);
   const navigate = useNavigate();
   const { classes } = useStyles();
   const form = useForm({
@@ -51,7 +52,7 @@ export default function NewPassword() {
     },
 
     validate: {
-      newPassword: (val) => (val.length < 8 ? null : "Invalid token"),
+      // newPassword: (val) => (val.length < 5 ? null : "Password is short"),
       confirmNewPassword: (val, values) =>
         val === values.newPassword
           ? null

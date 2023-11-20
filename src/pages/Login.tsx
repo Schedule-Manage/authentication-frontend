@@ -49,7 +49,7 @@ export default function Login(props: PaperProps) {
         onSubmit={form.onSubmit(() => {
           axios({
             method: "post",
-            url: "http://localhost:3000/api/v1/auth/login",
+            url: `${import.meta.env.VITE_SERVER_URL}auth/login`,
             data: {
               email: form.values.email,
               password: form.values.password,
@@ -57,7 +57,7 @@ export default function Login(props: PaperProps) {
           })
             .then((res: any) => {
               if (res.data.status === 200) {
-                console.log(res.data.data.access_token)
+                console.log(res.data.data.access_token);
                 // localStorage.setItem("uid", res.data._id);
                 localStorage.setItem("accessToken", res.data.data.access_token);
                 // localStorage.setItem("username", res.data.username);

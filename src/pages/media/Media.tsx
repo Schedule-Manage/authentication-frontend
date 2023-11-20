@@ -11,7 +11,10 @@ export default function Media() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_SERVER_URL}music`)
       .then((res) => res.json())
-      .then((data) => setAllMusic(data.data));
+      .then((data) => {
+        console.log(data);
+        setAllMusic(data.data);
+      });
   }, [allMusic]);
 
   // Adding songs and getting all of song inside history
@@ -25,7 +28,6 @@ export default function Media() {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log(data.data);
           setAllHistory(data.data);
         }
       });
@@ -50,7 +52,8 @@ export default function Media() {
         body: formData,
       })
         .then((res) => res.json())
-        .then((data) => console.log(data));
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
     }
   };
   return (

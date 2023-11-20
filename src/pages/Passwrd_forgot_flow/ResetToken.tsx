@@ -80,6 +80,7 @@ export default function ResetToken() {
                   autoClose: 2000,
                   icon: <IconCheck />,
                 });
+                localStorage.setItem("token", res.data.data)
                 navigate("/new/password");
               } else {
                 notifications.show({

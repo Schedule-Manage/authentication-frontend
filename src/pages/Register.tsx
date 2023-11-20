@@ -59,7 +59,7 @@ export default function Register(props: PaperProps) {
           axios({
             method: "post",
             // url: `${process.env.SERVER_URL}/auth/register`,
-            url: "http://localhost:3000/api/v1/auth/register",
+            url: `${import.meta.env.VITE_SERVER_URL}auth/register`,
             data: {
               names: form.values.name,
               email: form.values.email,
